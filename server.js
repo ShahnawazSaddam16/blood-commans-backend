@@ -26,7 +26,7 @@ app.get("/", async(req,res)=>{
     res.status(200).json({success: true, message: "Server Runnin Successfully"});
 });
 
-app.use("/api/blood-request", bloodRequestRoutes);
+app.use("/api/blood-requests", bloodRequestRoutes);
 
 // Mongoose connect
 dbConnection();
