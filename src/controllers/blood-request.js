@@ -70,6 +70,7 @@ const GetRememberedInfo = async(req,res) => {
             }
         });
     }catch(error){
+        console.error(error)
         return res.status(500).json({success:false, message:"Server error", error:error.message});
     }
 }
