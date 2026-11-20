@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 const dbConnection = require("./src/config/dbConnection");
 const cookieParser = require("cookie-parser");
 
+const bloodRequestRoutes = require("./src/routes/blood-requestRoutes");
+
 dotenv.config();
 
 const app = express();
@@ -23,6 +25,8 @@ app.use(cors({
 app.get("/", async(req,res)=>{
     res.status(200).json({success: true, message: "Server Runnin Successfully"});
 });
+
+app.use("/api/blood-request", bloodRequestRoutes);
 
 // Mongoose connect
 dbConnection();
