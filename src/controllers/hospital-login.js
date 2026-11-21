@@ -55,4 +55,16 @@ const Me = async(req,res)=>{
     }
 };
 
-module.exports = {Login, Me};
+const Logout = async(req,res)=>{
+    try{
+        const {maxAge,...clearOptions} = cookieOptions;
+
+        res.clearCookie("hospital_portal_token",clearOptions);
+
+        res.status(200).json({message:"Logout successful"});
+    }catch(error){
+        res.status(500).json({message:"Logout failed"});
+    }
+};
+
+module.exports = {Login, Me, Logout};
