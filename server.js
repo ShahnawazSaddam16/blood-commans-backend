@@ -5,6 +5,7 @@ const dbConnection = require("./src/config/dbConnection");
 const cookieParser = require("cookie-parser");
 
 const bloodRequestRoutes = require("./src/routes/blood-requestRoutes");
+const hospitalData = require("./src/utils/hospitalData");
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cors({
 app.get("/", async(req,res)=>{
     res.status(200).json({success: true, message: "Server Runnin Successfully"});
 });
+app.use("/api/data", hospitalData);
 
 app.use("/api/blood-requests", bloodRequestRoutes);
 
