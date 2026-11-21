@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const jwt = require("jsonwebtoken");
 const HospitalLogin = require("../models/hospital-logins");
 
@@ -29,7 +31,6 @@ const Login = async(req,res)=>{
         res.status(200).json({
             message:"Login successful",
             hospital:{
-                id:hospital._id,
                 hospitalname:hospital.hospitalname,
                 hospitalId:hospital.hospitalId
             }
@@ -41,29 +42,17 @@ const Login = async(req,res)=>{
 
 const Me = async(req,res)=>{
     try{
-        const token = req.cookies.hospital_portal_token;
-
-        if(!token){
-            return res.status(401).json({message:"Not authenticated"});
-        }
-
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        const hospital = await HospitalLogin.findById(decoded.id);
-
-        if(!hospital){
-            return res.status(401).json({message:"Not authenticated"});
-        }
+        const hospital = req.hospital;
 
         res.status(200).json({
             hospital:{
-                id:hospital._id,
                 hospitalname:hospital.hospitalname,
                 hospitalId:hospital.hospitalId
             }
         });
     }catch(error){
-        res.status(401).json({message:"Invalid or expired token"});
+        res.status(500).json({message:"Failed to fetch hospital"});
     }
 };
 
-module.exports = {Login,Me};
+module.exports = {Login, Me};

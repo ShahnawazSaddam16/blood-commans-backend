@@ -5,12 +5,13 @@ const dbConnection = require("./src/config/dbConnection");
 const cookieParser = require("cookie-parser");
 
 const bloodRequestRoutes = require("./src/routes/blood-requestRoutes");
+const HospitalLoginRoutes = require("./src/routes/HospitalRoutes/hospital-loginRoutes");
 const hospitalData = require("./src/utils/hospitalData");
 
 dotenv.config();
 
 const app = express();
-const Port = process.env.PORT || 5000;
+const Port = process.env.PORT;
 
 // Middleware
 app.use(express.json());
@@ -29,6 +30,7 @@ app.get("/", async(req,res)=>{
 app.use("/api/data", hospitalData);
 
 app.use("/api/blood-requests", bloodRequestRoutes);
+app.use("/api/hospital-login", HospitalLoginRoutes);
 
 // Mongoose connect
 dbConnection();
