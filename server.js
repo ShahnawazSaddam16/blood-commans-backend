@@ -30,7 +30,7 @@ app.get("/", async(req,res)=>{
 app.use("/api/data", hospitalData);
 
 app.use("/api/blood-requests", bloodRequestRoutes);
-app.use("/api/hospital-login", HospitalLoginRoutes);
+app.use("/api/hospital-auth", HospitalLoginRoutes);
 
 // Mongoose connect
 dbConnection();
