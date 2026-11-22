@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 
 const bloodRequestRoutes = require("./src/routes/blood-requestRoutes");
 const HospitalLoginRoutes = require("./src/routes/HospitalRoutes/hospital-loginRoutes");
+const HospitalbloodRequestRoutes = require("./src/routes/HospitalRoutes/blood-requestRoutes");
 const hospitalData = require("./src/utils/hospitalData");
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/data", hospitalData);
 
 app.use("/api/blood-requests", bloodRequestRoutes);
 app.use("/api/hospital-auth", HospitalLoginRoutes);
+app.use("/api/hospital-blood-request", HospitalbloodRequestRoutes);
 
 // Mongoose connect
 dbConnection();

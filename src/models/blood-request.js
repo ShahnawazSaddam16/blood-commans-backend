@@ -26,6 +26,19 @@ const bloodRequestSchema = new mongoose.Schema({
         type:Number,
         required:true,
         min:1
+    },
+    status:{
+        type:String,
+        enum:["pending","accepted","blood_available","in_transit","done","rejected","cancelled"],
+        default:"pending"
+    },
+    statusNote:{
+        type:String,
+        default:""
+    },
+    completedAt:{
+        type:Date,
+        default:null
     }
 },{timestamps:true});
 
