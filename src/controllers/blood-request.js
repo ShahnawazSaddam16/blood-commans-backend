@@ -75,4 +75,14 @@ const GetRememberedInfo = async(req,res) => {
     }
 }
 
-module.exports = {GenerateRequest, GetRememberedInfo};
+const GetAllBloodRequests = async(req,res) => {
+    try{
+        const requests = await BloodRequests.find().sort({createdAt:-1});
+
+        return res.status(200).json({success:true, count:requests.length, data:requests});
+    }catch(error){
+        return res.status(500).json({success:false, message:"Server error", error:error.message});
+    }
+}
+
+module.exports = {GenerateRequest, GetRememberedInfo, GetAllBloodRequests};
