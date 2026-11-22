@@ -11,9 +11,9 @@ const cookieOptions = {
 
 const GenerateRequest = async(req,res) => {
     try{
-        const {name, email, bloodtype, hospitalname, bloodrequirement, rememberMe} = req.body;
+        const {name, email, bloodtype, hospitalname, phone, bloodrequirement, rememberMe} = req.body;
 
-        if(!name || !email || !bloodtype || !hospitalname || !bloodrequirement){
+        if(!name || !email || !bloodtype || !hospitalname || !phone || !bloodrequirement){
             return res.status(400).json({success:false, message:"All fields are required"});
         }
 
@@ -21,6 +21,7 @@ const GenerateRequest = async(req,res) => {
             name,
             email,
             bloodtype,
+            phone,
             hospitalname,
             bloodrequirement
         });
@@ -66,6 +67,7 @@ const GetRememberedInfo = async(req,res) => {
                 name:lastRequest.name,
                 email:lastRequest.email,
                 bloodtype:lastRequest.bloodtype,
+                phone:lastRequest.phone,
                 hospitalname:lastRequest.hospitalname
             }
         });

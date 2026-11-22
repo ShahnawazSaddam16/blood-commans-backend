@@ -110,7 +110,7 @@ const EditRequest = async(req,res) => {
             return res.status(400).json({success:false, message:`Cannot edit a ${request.status} request`});
         }
 
-        const editableFields = ["name", "email", "bloodtype", "hospitalname", "bloodrequirement"];
+        const editableFields = ["name", "email", "bloodtype", "phone", "hospitalname", "bloodrequirement"];
         const updates = {};
 
         editableFields.forEach((field) => {
