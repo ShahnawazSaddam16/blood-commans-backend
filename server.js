@@ -15,7 +15,8 @@ const Port = process.env.PORT;
 
 // Middleware
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
+app.set('trust proxy', 1) 
 
 
 app.use(cors({
@@ -25,7 +26,7 @@ app.use(cors({
 
 // Routes
 app.get("/", async(req,res)=>{
-    res.status(200).json({success: true, message: "Server Runnin Successfully"});
+    res.status(200).json({success: true, message: "Server Running Successfully"});
 });
 
 app.use("/api/blood-requests", bloodRequestRoutes);
