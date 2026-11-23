@@ -18,17 +18,20 @@ const Port = process.env.PORT;
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.set('trust proxy', 1) 
+app.set("trust proxy", 1);
 
-
-app.use(cors({
-  origin: ["http://localhost:3000", "https://resume-ai.buttnetworks.com"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://resume-ai.buttnetworks.com"],
+    credentials: true,
+  }),
+);
 
 // Routes
-app.get("/", async(req,res)=>{
-    res.status(200).json({success: true, message: "Server Running Successfully"});
+app.get("/", async (req, res) => {
+  res
+    .status(200)
+    .json({ success: true, message: "Server Running Successfully" });
 });
 
 app.use("/api/blood-requests", bloodRequestRoutes);
