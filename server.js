@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const dbConnection = require("./src/config/dbConnection");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 
 const bloodRequestRoutes = require("./src/routes/blood-requestRoutes");
 const HospitalLoginRoutes = require("./src/routes/HospitalRoutes/hospital-loginRoutes");
@@ -14,6 +15,7 @@ const app = express();
 const Port = process.env.PORT;
 
 // Middleware
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.set('trust proxy', 1) 

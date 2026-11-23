@@ -4,8 +4,7 @@ const hospitalBloodRequestSchema = new mongoose.Schema({
     hospital:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Hospital",
-        required:true,
-        index:true
+        required:true
     },
     hospitalname:{
         type:String,
@@ -47,5 +46,14 @@ const hospitalBloodRequestSchema = new mongoose.Schema({
         default:"open"
     }
 },{timestamps:true});
+
+// Hospital pages list and filter requests owned by a hospital.
+hospitalBloodRequestSchema.index({hospital:1,createdAt:-1});
+hospitalBloodRequestSchema.index({hospital:1,status:1,createdAt:-1});
+
+// Public listings always start with open requests and may add blood type or urgency.
+hospitalBloodRequestSchema.index({status:1,createdAt:-1});
+hospitalBloodRequestSchema.index({status:1,bloodtype:1,createdAt:-1});
+hospitalBloodRequestSchema.index({status:1,urgency:1,createdAt:-1});
 
 module.exports = mongoose.model("HospitalBloodRequests", hospitalBloodRequestSchema);
