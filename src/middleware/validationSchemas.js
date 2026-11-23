@@ -12,6 +12,11 @@ const bloodStatuses = [
 ];
 const hospitalStatuses = ["open", "fulfilled", "closed"];
 const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB id");
+const neededBySchema = z.union([
+  z.iso.datetime({ offset: true, local: true }),
+  z.iso.date(),
+  z.literal("")
+]);
 
 const generateBloodRequestSchema = z
   .object({
@@ -82,7 +87,7 @@ const createHospitalBloodRequestSchema = z
       .optional()
       .default(""),
     description: z.string().trim().max(1000).optional().default(""),
-    neededBy: z.iso.datetime().nullable().optional().default(null),
+    neededBy: neededBySchema.nullable().optional().default(null),
   })
   .strict();
 
@@ -98,10 +103,7 @@ const updateHospitalBloodRequestSchema = z
       .regex(/^\+?[0-9\s\-()]{7,20}$/)
       .optional(),
     description: z.string().trim().max(1000).optional(),
-    neededBy: z
-      .union([z.iso.datetime(), z.literal("")])
-      .nullable()
-      .optional(),
+    neededBy: neededBySchema.nullable().optional(),
     status: z.enum(hospitalStatuses).optional(),
   })
   .strict()
@@ -122,6 +124,13 @@ const editBloodRequestSchema = z
       .optional(),
     hospitalname: z.string().trim().min(1).max(150).optional(),
     bloodrequirement: z.number().int().positive().max(1000).optional(),
+    description: z.string().trim().max(1000).optional(),
+    contactnumber: z
+      .string()
+      .trim()
+      .regex(/^\+?[0-9\s\-()]{7,20}$/)
+      .optional(),
+    neededBy: neededBySchema.nullable().optional(),
   })
   .strict()
   .refine(
