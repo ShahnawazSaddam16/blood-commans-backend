@@ -6,6 +6,6 @@ const {Login, Me, Logout} = require("../../controllers/hospital-login");
 
 router.post("/login", limiter, Login);
 router.get("/me", HospitalMiddleware, limiter, Me);
-router.post("/logout", limiter, HospitalMiddleware, Logout);
+router.post("/logout", limiter, Logout);
 
 module.exports = router;

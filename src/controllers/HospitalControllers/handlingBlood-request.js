@@ -92,6 +92,8 @@ const GetRequestById = async(req,res) => {
             allowedNextStatuses:TRANSITIONS[request.status] || []
         });
     }catch(error){
+        if(error.name === "CastError") return res.status(400).json({ success: false, message: "Invalid id" });
+        if(error.name === "ValidationError") return res.status(400).json({ success: false, message: error.message });
         return res.status(500).json({success:false, message:"Server error", error:error.message});
     }
 }
@@ -110,12 +112,15 @@ const EditRequest = async(req,res) => {
             return res.status(400).json({success:false, message:`Cannot edit a ${request.status} request`});
         }
 
-        const editableFields = ["name", "email", "bloodtype", "phone", "hospitalname", "bloodrequirement"];
+        const editableFields = ["name", "email", "bloodtype", "phone", "hospitalname", "bloodrequirement", "description", "contactnumber", "neededBy"];
+        const optionalFields = ["description", "contactnumber", "neededBy"];
         const updates = {};
 
         editableFields.forEach((field) => {
-            if(req.body[field] !== undefined && req.body[field] !== ""){
-                updates[field] = req.body[field];
+            if(req.body[field] !== undefined){
+                if(req.body[field] !== "" || optionalFields.includes(field)){
+                    updates[field] = field === "neededBy" && req.body[field] === "" ? null : req.body[field];
+                }
             }
         });
 
@@ -127,6 +132,8 @@ const EditRequest = async(req,res) => {
 
         return res.status(200).json({success:true, message:"Request updated successfully", data:updated});
     }catch(error){
+        if(error.name === "CastError") return res.status(400).json({ success: false, message: "Invalid id" });
+        if(error.name === "ValidationError") return res.status(400).json({ success: false, message: error.message });
         return res.status(500).json({success:false, message:"Server error", error:error.message});
     }
 }
@@ -175,6 +182,8 @@ const UpdateRequestStatus = async(req,res) => {
             allowedNextStatuses:TRANSITIONS[status]
         });
     }catch(error){
+        if(error.name === "CastError") return res.status(400).json({ success: false, message: "Invalid id" });
+        if(error.name === "ValidationError") return res.status(400).json({ success: false, message: error.message });
         return res.status(500).json({success:false, message:"Server error", error:error.message});
     }
 }
@@ -191,6 +200,8 @@ const DeleteRequest = async(req,res) => {
 
         return res.status(200).json({success:true, message:"Request deleted successfully", data:deleted});
     }catch(error){
+        if(error.name === "CastError") return res.status(400).json({ success: false, message: "Invalid id" });
+        if(error.name === "ValidationError") return res.status(400).json({ success: false, message: error.message });
         return res.status(500).json({success:false, message:"Server error", error:error.message});
     }
 }

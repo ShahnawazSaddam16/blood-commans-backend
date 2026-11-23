@@ -19,8 +19,8 @@ const {
 } = require("../../controllers/HospitalControllers/hospital-blood-request");
 
 router.get("/all-blood-requests", limiter, HospitalMiddleware, GetAllRequests);
-router.delete("delelte-status/bulk/:status", limiter, HospitalMiddleware, DeleteRequestsByStatus);
-router.get("blood-request/:id", limiter, HospitalMiddleware, GetRequestById);
+router.delete("/delete-status/bulk/:status", limiter, HospitalMiddleware, DeleteRequestsByStatus);
+router.get("/blood-request/:id", limiter, HospitalMiddleware, GetRequestById);
 router.put("/edit-blood-request/:id", limiter, HospitalMiddleware, EditRequest);
 router.patch("/update--blood-request/:id/status", limiter, HospitalMiddleware, UpdateRequestStatus);
 router.delete("/delete-blood-request/:id", limiter, HospitalMiddleware, DeleteRequest);

@@ -2,8 +2,6 @@ const HospitalBloodRequests = require("../../models/hospital-blood-request");
 
 const getHospitalId = (req) => req.hospital?._id || req.hospitalId || req.user?._id;
 
-const URGENCY_RANK = {critical:0, urgent:1, normal:2};
-
 const CreateMyRequest = async(req,res) => {
     try{
         const hospitalId = getHospitalId(req);
@@ -61,16 +59,27 @@ const GetPublicRequests = async(req,res) => {
         const limitNum = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
 
         const [requests, total] = await Promise.all([
-            HospitalBloodRequests.find(filter)
-                .select("-hospital")
-                .sort({createdAt:-1})
-                .skip((pageNum - 1) * limitNum)
-                .limit(limitNum)
-                .lean(),
+            HospitalBloodRequests.aggregate([
+                {$match:filter},
+                {$addFields:{
+                    urgencyRank:{
+                        $switch:{
+                            branches:[
+                                {case:{$eq:["$urgency","critical"]},then:0},
+                                {case:{$eq:["$urgency","urgent"]},then:1},
+                                {case:{$eq:["$urgency","normal"]},then:2}
+                            ],
+                            default:2
+                        }
+                    }
+                }},
+                {$sort:{urgencyRank:1,createdAt:-1}},
+                {$skip:(pageNum - 1) * limitNum},
+                {$limit:limitNum},
+                {$project:{hospital:0,urgencyRank:0}}
+            ]),
             HospitalBloodRequests.countDocuments(filter)
         ]);
-
-        requests.sort((a, b) => URGENCY_RANK[a.urgency] - URGENCY_RANK[b.urgency]);
 
         return res.status(200).json({
             success:true,
@@ -155,11 +164,14 @@ const UpdateMyRequest = async(req,res) => {
         const {id} = req.params;
 
         const editableFields = ["hospitalname", "bloodtype", "bloodrequirement", "urgency", "contactnumber", "description", "neededBy", "status"];
+        const optionalFields = ["contactnumber", "description", "neededBy"];
         const updates = {};
 
         editableFields.forEach((field) => {
-            if(req.body[field] !== undefined && req.body[field] !== ""){
-                updates[field] = req.body[field];
+            if(req.body[field] !== undefined){
+                if(req.body[field] !== "" || optionalFields.includes(field)){
+                    updates[field] = field === "neededBy" && req.body[field] === "" ? null : req.body[field];
+                }
             }
         });
 
