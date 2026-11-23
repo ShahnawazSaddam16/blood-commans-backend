@@ -17,6 +17,10 @@ const neededBySchema = z.union([
   z.iso.date(),
   z.literal("")
 ]);
+const contactNumberSchema = z
+  .string()
+  .trim()
+  .pipe(z.union([z.literal(""), z.string().regex(/^\+?[0-9\s\-()]{7,20}$/)]));
 
 const generateBloodRequestSchema = z
   .object({
@@ -80,12 +84,7 @@ const createHospitalBloodRequestSchema = z
       .enum(["normal", "urgent", "critical"])
       .optional()
       .default("normal"),
-    contactnumber: z
-      .string()
-      .trim()
-      .regex(/^\+?[0-9\s\-()]{7,20}$/)
-      .optional()
-      .default(""),
+    contactnumber: contactNumberSchema.optional().default(""),
     description: z.string().trim().max(1000).optional().default(""),
     neededBy: neededBySchema.nullable().optional().default(null),
   })
@@ -97,11 +96,7 @@ const updateHospitalBloodRequestSchema = z
     bloodtype: z.enum(bloodTypes).optional(),
     bloodrequirement: z.number().int().positive().max(1000).optional(),
     urgency: z.enum(["normal", "urgent", "critical"]).optional(),
-    contactnumber: z
-      .string()
-      .trim()
-      .regex(/^\+?[0-9\s\-()]{7,20}$/)
-      .optional(),
+    contactnumber: contactNumberSchema.optional(),
     description: z.string().trim().max(1000).optional(),
     neededBy: neededBySchema.nullable().optional(),
     status: z.enum(hospitalStatuses).optional(),
@@ -125,11 +120,7 @@ const editBloodRequestSchema = z
     hospitalname: z.string().trim().min(1).max(150).optional(),
     bloodrequirement: z.number().int().positive().max(1000).optional(),
     description: z.string().trim().max(1000).optional(),
-    contactnumber: z
-      .string()
-      .trim()
-      .regex(/^\+?[0-9\s\-()]{7,20}$/)
-      .optional(),
+    contactnumber: contactNumberSchema.optional(),
     neededBy: neededBySchema.nullable().optional(),
   })
   .strict()
