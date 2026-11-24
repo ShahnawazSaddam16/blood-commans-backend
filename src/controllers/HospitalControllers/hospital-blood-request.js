@@ -62,7 +62,7 @@ const GetPublicRequests = async (req, res) => {
   try {
     const { bloodtype, urgency, search, page = 1, limit = 20 } = req.query;
 
-    const filter = { status: "open" };
+    const filter = { status: { $eq: "open", $ne: "accepted" } };
 
     if (bloodtype) {
       filter.bloodtype = bloodtype;

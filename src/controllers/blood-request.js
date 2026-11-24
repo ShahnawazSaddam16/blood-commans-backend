@@ -118,7 +118,9 @@ const GetRememberedInfo = async (req, res) => {
 
 const GetAllBloodRequests = async (req, res) => {
   try {
-    const requests = await BloodRequests.find().sort({ createdAt: -1 });
+    const requests = await BloodRequests.find({
+      status: { $ne: "accepted" },
+    }).sort({ createdAt: -1 });
 
     return res
       .status(200)
