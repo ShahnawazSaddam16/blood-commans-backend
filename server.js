@@ -22,7 +22,7 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://resume-ai.buttnetworks.com"],
+    origin: ["http://localhost:3000", "https://resume-ai.buttnetworks.com", "https://blood-commans.vercel.app"],
     credentials: true,
   }),
 );
