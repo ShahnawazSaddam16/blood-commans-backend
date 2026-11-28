@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const limiter = require("../../utils/limiter");
 const HospitalMiddleware = require("../../middleware/HospitalMiddlware");
-const { Login, Me, Logout } = require("../../controllers/hospital-login");
+const { Login, Me, Logout } = require("../../controllers/HospitalControllers/hospital-login");
 const validate = require("../../middleware/validate");
 const { hospitalLoginSchema } = require("../../middleware/validationSchemas");
 

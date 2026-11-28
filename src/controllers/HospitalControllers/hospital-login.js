@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const jwt = require("jsonwebtoken");
-const HospitalLogin = require("../models/hospital-logins");
+const HospitalLogin = require("../../models/hospital-logins");
 
 const cookieOptions = {
   httpOnly: true,
